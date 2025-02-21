@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Detection</title>
+    <style>
+        /* Import Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        /* Global Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: url('https://source.unsplash.com/1600x900/?technology,email') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            transition: background-color 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Transparent Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Textarea Styling */
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #ff8c00;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            outline: none;
+            color: black;
+            font-weight: 500;
+        }
+
+        /* Colorful Button */
+        .btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 5px 20px rgba(255, 69, 0, 0.7);
+        }
+
+        /* Result Box */
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Spam (Red) & Not Spam (Green) Colors */
+        .spam { background-color: red; color: white; }
+        .not-spam { background-color: green; color: white; }
+
+        /* Blinking Animation */
+        @keyframes blinkRed {
+            0% { background-color: rgba(255, 0, 0, 0.2); }
+            50% { background-color: rgba(255, 0, 0, 0.6); }
+            100% { background-color: rgba(255, 0, 0, 0.2); }
+        }
+
+        @keyframes blinkGreen {
+            0% { background-color: rgba(0, 255, 0, 0.2); }
+            50% { background-color: rgba(0, 255, 0, 0.6); }
+            100% { background-color: rgba(0, 255, 0, 0.2); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Transparent Overlay -->
+    <div class="overlay"></div>
+
+    <div class="container">
+        <h1>Email Spam Detector</h1>
+        <p>Paste your email below to check if it's Spam or Not Spam:</p>
+        
+        <form method="POST" action="/predict">
+            <textarea name="email_text" placeholder="Paste your email here..." required>{{ email_text }}</textarea>
+            <br>
+            <button class="btn" type="submit">🚀 Check Spam</button>
+        </form>
+
+        <!-- Result -->
+        <div id="result" class="{{ 'spam' if prediction=='Spam' else 'not-spam' }}">
+            {{ prediction }}
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Blinking Effect
+        document.addEventListener("DOMContentLoaded", function () {
+            let result = document.getElementById("result");
+            if (result.innerHTML.trim() === "Spam") {
+                document.body.style.animation = "blinkRed 1s infinite alternate";
+                result.style.display = "block";
+            } else if (result.innerHTML.trim() === "Not Spam") {
+                document.body.style.animation = "blinkGreen 1s infinite alternate";
+                result.style.display = "block";
+            }
+        });
+    </script>
+
+</body>
+</html>
+
